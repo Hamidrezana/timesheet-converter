@@ -16,7 +16,9 @@ export function readXLS(src: string) {
 export function exportTimeSheet(
   jsonData: XLSType,
   startId: string,
-  endId: string
+  endId: string,
+  startShift = 1,
+  endShift = 1
 ) {
   const data: TimeSheet[] = [];
   let shouldRead = false;
@@ -33,8 +35,8 @@ export function exportTimeSheet(
       data.push({
         dayName: el.__EMPTY_1,
         date: el.__EMPTY,
-        start: el.__EMPTY_2,
-        end: el.__EMPTY_3,
+        start: el[`__EMPTY_${startShift + 1}`],
+        end: el[`__EMPTY_${endShift * 2 + 1}`],
       });
     }
   });
