@@ -16,10 +16,17 @@ async function main(
   destSrc: string,
   modifiedSrc: string,
   startShift: number,
-  endShift: number
+  endShift: number,
+  sheetIndex: number = 1
 ) {
   importTimeSheet(
-    exportTimeSheet(readXLS(src), startId, endId, startShift, endShift),
+    exportTimeSheet(
+      readXLS(src, sheetIndex, { raw: false }),
+      startId,
+      endId,
+      startShift,
+      endShift
+    ),
     destSrc,
     modifiedSrc
   );

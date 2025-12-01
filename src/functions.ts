@@ -2,12 +2,13 @@ import XLSX from "xlsx";
 import ExcelJS from "exceljs";
 import { TimeSheet, XLSType } from "./types";
 
-export function readXLS(src: string) {
+export function readXLS(src: string, index = 1, options?: XLSX.Sheet2JSONOpts) {
   const workbook = XLSX.readFile(src);
-  const firstSheetName = workbook.SheetNames[1];
+  const firstSheetName = workbook.SheetNames[index];
   const worksheet = workbook.Sheets[firstSheetName];
   const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-    raw: false,
+    raw: true,
+    ...options,
   }) as XLSType;
 
   return jsonData;
@@ -35,12 +36,25 @@ export function exportTimeSheet(
       data.push({
         dayName: el.__EMPTY_1,
         date: el.__EMPTY,
-        start: el[`__EMPTY_${startShift + 1}`],
-        end: el[`__EMPTY_${endShift * 2 + 1}`],
+        start: el[`__EMPTY_${startShift}`],
+        end: el[`__EMPTY_${endShift}`],
       });
     }
   });
+  return data;
+}
 
+export function exportTimeSheet2(jsonData: XLSType) {
+  const data: TimeSheet[] = [];
+  const lastEl = jsonData.pop() as XLSType;
+  lastEl.forEach((el: string) => {
+    data.push({
+      date: "",
+      dayName: "",
+      start: el ? el.slice(0, 5) : "00:00",
+      end: el ? el.slice(5) : "00:00",
+    });
+  });
   return data;
 }
 

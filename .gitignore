@@ -2,3 +2,5 @@ dist
 node_modules
 resources/*
 .DS_Store
+config.*
+src/configs.*
